@@ -17,11 +17,27 @@ class XorCipher {
         this.key_length = key.length();
     }
 
-    private int[] encrypt(char[] line) {
-        int[] encrypted_line = new int[line.length];
+    public int getKey_length() {
+        return key_length;
+    }
+
+    public void setKey_length(int key_length) {
+        this.key_length = key_length;
+    }
+
+    private byte xor(char c1, char c2) {
+        return (byte) (c1 ^ c2);
+    }
+
+    private char xorByte(byte b1, byte b2) {
+        return (char) (b1 ^ b2);
+    }
+
+    private byte[] encrypt(char[] line) {
+        byte[] encrypted_line = new byte[line.length];
         if (this.key_length == line.length) {
             for (int i = 0; i < line.length; i++) {
-                encrypted_line[i] = this.key[i] ^ line[i];
+                encrypted_line[i] = xor(this.key[i], line[i]);
             }
         } else System.out.print("Length of the key isn't equal to line length. Cannot encrypt.");
 
@@ -34,10 +50,11 @@ class XorCipher {
 
         while (scanner.hasNextLine()) {
             char[] line = scanner.nextLine().toCharArray();
-            int[] encrypted_line = this.encrypt(line);
+            byte[] encrypted_line = this.encrypt(line);
 
             // prepare string to write in file
-            StringBuilder prepared_encyrpted_line = new StringBuilder();;
+            StringBuilder prepared_encyrpted_line = new StringBuilder();
+            ;
             for (int i : encrypted_line) prepared_encyrpted_line.append(i).append(' ');
             prepared_encyrpted_line.deleteCharAt(prepared_encyrpted_line.length() - 1);  // remove last space
 
@@ -63,8 +80,37 @@ class XorCipher {
         return decrypted_line;
     }
 
-    private boolean cryptanalysis(final char[] encrypted) {
+    private byte[] returnByteArr(String line) {
+        byte[] arr = new byte[line.length()];
+
+        return arr;
+    }
+
+    private boolean cryptanalysis(final ArrayList<String> lines) {
         boolean found_key = false;
+        // how to find the key?
+        // 1. take first and second line to analyze
+        // 2. do loop for every char from 'a' to 'z' (97 - 122) as a potential key
+        // 3. if there isn't matched any char, check for the space (32)
+        // 4. compare char from potential key and char from first and second line as XOR calculation
+        // 5. if there is the match between XOR result c1 and c2 or c1 and c3 that c1 is a key char
+        // 6. go to next char
+        // 7. after loop for first and second line check that the key has every chars
+        // 7.a if not then compare first line with third line etc...
+        // 7.b if yes that the key has been fully collected
+
+        for (int i = 0, j = 1; i < lines.size(); i++) {
+            byte[] line1 = returnByteArr(lines.get(i));
+            byte[] line2 = returnByteArr(lines.get(j++));
+
+            for (int k = 97; k < 122; k++) {
+                //byte xor_c1c2 = xorByte((byte) k, line1[k - 97]);
+                //byte xor_c1c3 = xorByte((byte) k, line2[k - 97]);
+
+
+            }
+        }
+
         return found_key;
     }
 
@@ -72,34 +118,22 @@ class XorCipher {
         Scanner scanner = new Scanner(new File(path + "/crypto.txt"));
         ArrayList<String> lines = new ArrayList<>();
 
+        // first read all encrypted lines
         while (scanner.hasNextLine()) lines.add(scanner.nextLine());
+        scanner.close();
 
-        // get the length of array
-        int array_length = 0;
-        for (String s : lines) array_length += s.length();
+        // set length of key based on first line of encyrpted text
+        this.setKey_length(lines.get(0).length());
 
-        if (array_length == 0) {
+        if (getKey_length() == 0) {
             System.out.print("No text to decrypt\n");
             return;
         }
 
-        char[] encrypted = new char[array_length + lines.size() - 1];
-
-        int pos = 0;
-        for (String s : lines) {
-            for (char c : s.toCharArray()) {
-                if (Character.isLetter(c)) encrypted[pos++] = c;
-                else encrypted[pos++] = ' ';
-            }
-            pos++;
-        }
-
-        scanner.close();
-
-        if (this.cryptanalysis(encrypted)) {
-            char[] decrypted = this.decrypt(encrypted);
-            System.out.printf("encrypted line: %s\n", String.valueOf(encrypted));
-            System.out.printf("decrypted line: %s\n", String.valueOf(decrypted));
+        if (this.cryptanalysis(lines)) {
+            //char[] decrypted = this.decrypt(encrypted);
+            //System.out.printf("encrypted line: %s\n", String.valueOf(encrypted));
+            //System.out.printf("decrypted line: %s\n", String.valueOf(decrypted));
 
             // build the string from every character from key array
             StringBuilder builder = new StringBuilder();
@@ -112,7 +146,7 @@ class XorCipher {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/decrypt.txt"));
             BufferedWriter writerKey = new BufferedWriter(new FileWriter(path + "/key-crypto.txt"));
 
-            writer.write(decrypted);
+            //writer.write(decrypted);
             writerKey.write(builder.toString());
 
             writer.close();
