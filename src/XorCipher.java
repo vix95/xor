@@ -6,46 +6,51 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class XorCipher {
-    private int m = 26; // chars qty
     private char[] key;
+    private int key_length;
 
     XorCipher() {
     }
 
     XorCipher(String key) {
         this.key = key.toCharArray();
+        this.key_length = key.length();
     }
 
-    private char[] encrypt(char[] line) {
-        char[] encrypted_line = new char[line.length];
-        for (int i = 0, j = 0; i < line.length; i++) {
-            int int_line = line[i] - 'a'; // plain
-            if (Character.isLetter(line[i])) {
+    private int[] encrypt(char[] line) {
+        int[] encrypted_line = new int[line.length];
+        if (this.key_length == line.length) {
+            for (int i = 0; i < line.length; i++) {
+                encrypted_line[i] = this.key[i] ^ line[i];
             }
-        }
+        } else System.out.print("Length of the key isn't equal to line length. Cannot encrypt.");
 
         return encrypted_line;
     }
 
     void encryptFile(final String path) throws IOException {
-        if (this.key != null) {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/crypto.txt"));
-            Scanner scanner = new Scanner(new File(path + "/plain.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/crypto.txt"));
+        Scanner scanner = new Scanner(new File(path + "/plain.txt"));
 
-            while (scanner.hasNextLine()) {
-                char[] line = scanner.nextLine().toCharArray();
-                char[] encrypted_line = this.encrypt(line);
+        while (scanner.hasNextLine()) {
+            char[] line = scanner.nextLine().toCharArray();
+            int[] encrypted_line = this.encrypt(line);
 
-                System.out.println("plain line: " + String.valueOf(line));
-                System.out.println("encrypted line: " + String.valueOf(encrypted_line) + "\n");
+            // prepare string to write in file
+            StringBuilder prepared_encyrpted_line = new StringBuilder();;
+            for (int i : encrypted_line) prepared_encyrpted_line.append(i).append(' ');
+            prepared_encyrpted_line.deleteCharAt(prepared_encyrpted_line.length() - 1);  // remove last space
 
-                writer.write(encrypted_line);
-                writer.write('\n');
-            }
 
-            writer.close();
-            scanner.close();
+            System.out.println("plain line: " + String.valueOf(line));
+            System.out.println("encrypted line: " + prepared_encyrpted_line + "\n");
+
+            writer.write(prepared_encyrpted_line.toString());
+            writer.write('\n');
         }
+
+        writer.close();
+        scanner.close();
     }
 
     private char[] decrypt(char[] line) {
