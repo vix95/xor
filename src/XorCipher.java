@@ -17,12 +17,8 @@ class XorCipher {
         this.key_length = key.length();
     }
 
-    public int getKey_length() {
+    private int getKey_length() {
         return key_length;
-    }
-
-    public void setKey_length(int key_length) {
-        this.key_length = key_length;
     }
 
     private byte xor(char c1, char c2) {
@@ -88,6 +84,9 @@ class XorCipher {
 
     private boolean cryptanalysis(final ArrayList<String> lines) {
         boolean found_key = false;
+        this.key = new char[returnByteArr(lines.get(1)).length];
+        this.key_length = this.key.length;
+
         // how to find the key?
         // 1. take first and second line to analyze
         // 2. do loop for every char from 'a' to 'z' (97 - 122) as a potential key
@@ -99,15 +98,22 @@ class XorCipher {
         // 7.a if not then compare first line with third line etc...
         // 7.b if yes that the key has been fully collected
 
-        for (int i = 0, j = 1; i < lines.size(); i++) {
+        for (int i = 0; i < lines.size(); i++) {
             byte[] line1 = returnByteArr(lines.get(i));
-            byte[] line2 = returnByteArr(lines.get(j++));
 
-            for (int k = 97; k < 122; k++) {
-                //byte xor_c1c2 = xorByte((byte) k, line1[k - 97]);
-                //byte xor_c1c3 = xorByte((byte) k, line2[k - 97]);
+            for (int j = 0; j < lines.size(); j++) {
+                byte[] line2 = returnByteArr(lines.get(j++));
+
+                if (i != j) {
+                    for (int n = 0; n < this.key_length; n++) {
+                        for (int k = 97; k < 122; k++) {
+                            char xor_c1c2 = xorByte((byte) k, line1[n]);
+                            char xor_c1c3 = xorByte((byte) k, line2[n]);
 
 
+                        }
+                    }
+                }
             }
         }
 
@@ -122,10 +128,7 @@ class XorCipher {
         while (scanner.hasNextLine()) lines.add(scanner.nextLine());
         scanner.close();
 
-        // set length of key based on first line of encyrpted text
-        this.setKey_length(lines.get(0).length());
-
-        if (getKey_length() == 0) {
+        if (lines.size() == 0) {
             System.out.print("No text to decrypt\n");
             return;
         }
