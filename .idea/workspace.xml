@@ -100,25 +100,20 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
-          <line>179</line>
+          <line>182</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
-          <line>154</line>
-          <option name="timeStamp" value="76" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
-          <line>149</line>
-          <option name="timeStamp" value="79" />
+          <line>162</line>
+          <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="this.key" />
-        <watch expression="a" />
+        <watch expression="line[pos]" />
       </configuration>
     </watches-manager>
   </component>

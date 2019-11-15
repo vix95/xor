@@ -141,13 +141,8 @@ class XorCipher {
 
                                 if (xor_c2_space == xor_c3_space) {
                                     if (xor_c2_space >= 97 && xor_c2_space <= 122) this.key[n] = (char) xor_c3_space;
-                                }
-                                else if (xor_c1_space == xor_c3_space) {
+                                } else if (xor_c1_space == xor_c3_space) {
                                     if (xor_c1_space >= 97 && xor_c1_space <= 122) this.key[n] = (char) xor_c1_space;
-                                }
-
-                                if (xor_c1c2c3 == 0) {
-                                    //this.key[n] = (char) line1[n];
                                 }
 
                                 if (n == 4) {
@@ -157,20 +152,28 @@ class XorCipher {
                                 }
 
                                 int b = 2;
-                            } else if (xor_c1c2_bin.substring(0, 3).equals("000")) {  // letter
-
                             }
-                        /*for (int k = 97; k < 122; k++) {
-                            char xor_c1c2 = xorByte(line1[n], line2[n]);
-                            char xor_c2k = xorByte(line2[n], (byte) k);
-
-                            char a = xorByte(line1[n], line2[n]);
-                        }*/
                         }
                     }
                 }
             }
         }
+
+        // check the key fo crypto text
+        /*for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
+            boolean correct_match = false;
+            for (int i = 0; i < lines.size(); i++) {  // let's go to down as column directions
+                byte[] line = returnByteArr(lines.get(i));
+                //byte xor_k_c = xorByte((byte) this.key[pos], line[pos]);
+                //byte xor_k_space = xorByte((byte) this.key[pos], (byte) 32);
+
+                if (line[pos] == 0) {
+                    this.key[pos] = (char) 32;
+                    int b = 0;
+                    //break;
+                }
+            }
+        }*/
 
         // build the string from every character from key array
         StringBuilder stringBuilder = new StringBuilder();
