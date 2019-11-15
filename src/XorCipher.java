@@ -160,20 +160,27 @@ class XorCipher {
         }
 
         // check the key fo crypto text
-        /*for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
-            boolean correct_match = false;
+        for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
+            int space = 0;
             for (int i = 0; i < lines.size(); i++) {  // let's go to down as column directions
                 byte[] line = returnByteArr(lines.get(i));
+                String xor_space = byteToBin(xorByte(line[pos], (byte) 32));
                 //byte xor_k_c = xorByte((byte) this.key[pos], line[pos]);
                 //byte xor_k_space = xorByte((byte) this.key[pos], (byte) 32);
 
+                if (xor_space.substring(0, 3).equals("010")) {
+                    space++;
+                }
+
                 if (line[pos] == 0) {
-                    this.key[pos] = (char) 32;
+                    //this.key[pos] = (char) 32;
                     int b = 0;
                     //break;
                 }
             }
-        }*/
+
+            System.out.printf("pos: %d, spaces: %d\n", pos, space);
+        }
 
         // build the string from every character from key array
         StringBuilder stringBuilder = new StringBuilder();
