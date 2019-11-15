@@ -30,8 +30,15 @@ public class Xor {
                         break;
 
                     case "-k":  // crypto analysis break key
-                        XorCipher xorCipher = new XorCipher();
-                        xorCipher.breakCipher(path);
+                        key = readKey();
+                        preparePlainFile(key);
+                        XorCipher xorCipher = new XorCipher(key);
+                        xorCipher.encryptFile(path);
+
+
+
+                        XorCipher xorCipher2 = new XorCipher();
+                        xorCipher2.breakCipher(path);
                         break;
 
                     default:

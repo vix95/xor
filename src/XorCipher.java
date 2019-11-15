@@ -18,10 +18,6 @@ class XorCipher {
         this.key_length = key.length();
     }
 
-    private int getKey_length() {
-        return key_length;
-    }
-
     private byte xor(char c1, char c2) {
         return (byte) (c1 ^ c2);
     }
@@ -32,10 +28,6 @@ class XorCipher {
 
     private String byteToBin(byte b) {
         return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
-    }
-
-    private byte xorByteSpace(byte b1, byte b2) {
-        return Byte.parseByte(String.format("%8s", Integer.toBinaryString((b1 ^ b2 ^ 32) & 0xFF)).replace(' ', '0'), 2);
     }
 
     private byte[] encrypt(char[] line) {
@@ -59,7 +51,7 @@ class XorCipher {
 
             // prepare string to write in file
             StringBuilder prepared_encyrpted_line = new StringBuilder();
-            ;
+
             for (int i : encrypted_line) prepared_encyrpted_line.append(i).append(' ');
             prepared_encyrpted_line.deleteCharAt(prepared_encyrpted_line.length() - 1);  // remove last space
 
@@ -75,11 +67,11 @@ class XorCipher {
         scanner.close();
     }
 
-    private char[] decrypt(char[] line) {
-        char[] decrypted_line = new char[line.length];
-        for (int i = 0, j = 0; i < line.length; i++) {
-            if (Character.isLetter(line[i])) {
-            }
+    private char[] decrypt(String line) {
+        char[] decrypted_line = new char[this.key_length];
+        for (int i = 0; i < this.key_length; i++) {
+            byte[] line_arr = returnByteArr(line);
+            decrypted_line[i] = (char) ((byte) this.key[i] ^ line_arr[i]);
         }
 
         return decrypted_line;
@@ -101,18 +93,6 @@ class XorCipher {
         this.key = new char[returnByteArr(lines.get(1)).length];
         this.key_length = this.key.length;
 
-        // how to find the key?
-        // 1. take first and second line to analyze
-        // 2. do loop for every char from 'a' to 'z' (97 - 122) as a potential key
-        // 3. if there isn't matched any char, check for the space (32)
-        // 4. compare char from potential key and char from first and second line as XOR calculation
-        // 5. if there is the match between XOR result c1 and c2 or c1 and c3 that c1 is a key char
-        // 6. go to next char
-        // 7. after loop for first and second line check that the key has every chars
-        // 7.a if not then compare first line with third line etc...
-        // 7.b if yes that the key has been fully collected
-
-        int a = 0;
         for (int i = 0; i < lines.size(); i++) {
             byte[] line1 = returnByteArr(lines.get(i));
 
@@ -131,10 +111,6 @@ class XorCipher {
                             String xor_c1c2_bin = byteToBin(xorByte(line1[n], line2[n]));
 
                             if (xor_c1c2_bin.substring(0, 3).equals("010")) {  // space
-                                byte xor_c1c2 = xorByte(line1[n], line2[n]);
-                                byte xor_c2c3 = xorByte(line2[n], line3[n]);
-                                byte xor_c1c3 = xorByte(line1[n], line3[n]);
-                                byte xor_c1c2c3 = xorByte(xor_c1c2, line3[n]);
                                 byte xor_c1_space = xorByte(line1[n], (byte) 32);
                                 byte xor_c2_space = xorByte(line2[n], (byte) 32);
                                 byte xor_c3_space = xorByte(line3[n], (byte) 32);
@@ -144,14 +120,6 @@ class XorCipher {
                                 } else if (xor_c1_space == xor_c3_space) {
                                     if (xor_c1_space >= 97 && xor_c1_space <= 122) this.key[n] = (char) xor_c1_space;
                                 }
-
-                                if (n == 4) {
-                                    if (this.key[4] == 't') {
-                                        a++;
-                                    }
-                                }
-
-                                int b = 2;
                             }
                         }
                     }
@@ -160,63 +128,32 @@ class XorCipher {
         }
 
         // check the key fo crypto text
-        for (int pos = 4; pos < this.key_length; pos++) {  // let's go by key
-            int space = 0, character = 0;
+        for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
             for (int i = 0, j = 1, k = 2; i < lines.size(); i++, j++, k++) {  // let's go to down as column directions
                 if (k == lines.size()) break;
                 byte[] line = returnByteArr(lines.get(i));
                 byte[] line2 = returnByteArr(lines.get(j));
                 byte[] line3 = returnByteArr(lines.get(k));
-                String xor_space = byteToBin(xorByte((byte) line[pos], (byte) line2[pos]));
-                byte xor_space_b = xorByte((byte) line[pos], (byte) line2[pos]);
-                String xor_c1k = byteToBin(xorByte((byte) line[pos], (byte) key[pos]));
-                String xor_c2k = byteToBin(xorByte((byte) line2[pos], (byte) key[pos]));
-                String xor_space1 = byteToBin(xorByte((byte) line[pos], (byte) 32));
-                String xor_space2 = byteToBin(xorByte((byte) line2[pos], (byte) 32));
-                //byte xor_k_c = xorByte((byte) this.key[pos], line[pos]);
-                //byte xor_k_space = xorByte((byte) this.key[pos], (byte) 32);
+                byte xor_space_b = xorByte(line[pos], line2[pos]);
 
                 if (xor_space_b == 0) {
-                    String xor_test = byteToBin(xorByte((byte) line[pos], (byte) 32));
-                    byte xor_test_b1 = xorByte((byte) line[pos], (byte) 32);
-                    char xor_test_c1 = (char) xor_test_b1;
-                    byte xor_test_b2 = xorByte((byte) line2[pos], (byte) 32);
-                    char xor_test_c2 = (char) xor_test_b2;
-                    byte xor_test_b3 = xorByte((byte) line3[pos], (byte) 32);
-                    char xor_test_c3 = (char) xor_test_b3;
+                    byte xor_test_b1 = xorByte(line[pos], (byte) 32);
+                    byte xor_test_b2 = xorByte(line2[pos], (byte) 32);
+                    byte xor_test_b3 = xorByte(line3[pos], (byte) 32);
 
                     if (((xor_test_b1 >= 97 && xor_test_b1 <= 122) || xor_test_b1 == 32) &&
                             ((xor_test_b2 >= 97 && xor_test_b2 <= 122) || xor_test_b2 == 32) &&
                             ((xor_test_b3 >= 97 && xor_test_b3 <= 122) || xor_test_b3 == 32)) {
-
-                        // if byte 32 is twice then I know that it's space
+                        
                         // if xor 1, xor 2 and xor 3 is between 97 and 122 and
                         // xor 1 == xor 2 == xor 3 than it isn't space
                         if ((xor_test_b1 >= 97 && xor_test_b2 >= 97 && xor_test_b3 >= 97) &&
                                 !(xor_test_b1 == xor_test_b2 && xor_test_b2 == xor_test_b3)) {
                             this.key[pos] = (char) 32;
-                            int y = 0;
                         }
-
-                        int h = 0;
                     }
-
-                    if (xor_test_b1 == xor_test_b2 && xor_test_b2 != xor_test_b3)
-                        if (xor_test_b3 >= 97 && xor_test_b3 <= 122) {
-                            //this.key[pos] = (char) xor_test_b1;
-                            int z = 0;
-                        }
-                    int p = 0;
-                }
-
-                if (xor_space.substring(0, 3).equals("010")) {
-                    space++;
-                } else {
-                    character++;
                 }
             }
-
-            System.out.printf("for pos: %d - spaces: %d and characters: %d\n", pos, space, character);
         }
 
         // build the string from every character from key array
@@ -224,7 +161,7 @@ class XorCipher {
         for (char c : this.key) stringBuilder.append(c);
 
         this.key_str = stringBuilder.toString();
-        return found_key;
+        return true;
     }
 
     void breakCipher(final String path) throws IOException {
@@ -241,19 +178,23 @@ class XorCipher {
         }
 
         if (this.cryptanalysis(lines)) {
-            //char[] decrypted = this.decrypt(encrypted);
-            //System.out.printf("encrypted line: %s\n", String.valueOf(encrypted));
-            //System.out.printf("decrypted line: %s\n", String.valueOf(decrypted));
-
+            BufferedWriter writerKey = new BufferedWriter(new FileWriter(path + "/key-crypto.txt"));
+            writerKey.write(this.key_str);
+            writerKey.close();
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/decrypt.txt"));
-            BufferedWriter writerKey = new BufferedWriter(new FileWriter(path + "/key-crypto.txt"));
+            for (String encrypted : lines) {
+                char[] decrypted = this.decrypt(encrypted);
+                System.out.printf("encrypted line: %s\n", encrypted);
+                System.out.printf("decrypted line: %s\n\n", String.valueOf(decrypted));
 
-            //writer.write(decrypted);
-            writerKey.write(this.key_str);
+                writer.write(decrypted);
+                writer.write('\n');
+            }
 
             writer.close();
-            writerKey.close();
+
+            System.out.printf("the key is: %s\n", String.valueOf(this.key));
         } else {
             System.out.println("Error: finding the key is impossible");
         }
