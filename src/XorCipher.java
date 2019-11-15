@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 class XorCipher {
     private char[] key;
+    private String key_str;
     private int key_length;
 
     XorCipher() {
@@ -27,6 +28,14 @@ class XorCipher {
 
     private byte xorByte(byte b1, byte b2) {
         return (byte) (b1 ^ b2);
+    }
+
+    private String byteToBin(byte b) {
+        return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+    }
+
+    private byte xorByteSpace(byte b1, byte b2) {
+        return Byte.parseByte(String.format("%8s", Integer.toBinaryString((b1 ^ b2 ^ 32) & 0xFF)).replace(' ', '0'), 2);
     }
 
     private byte[] encrypt(char[] line) {
@@ -103,32 +112,71 @@ class XorCipher {
         // 7.a if not then compare first line with third line etc...
         // 7.b if yes that the key has been fully collected
 
+        int a = 0;
         for (int i = 0; i < lines.size(); i++) {
             byte[] line1 = returnByteArr(lines.get(i));
 
             for (int j = 0; j < lines.size(); j++) {
                 byte[] line2 = returnByteArr(lines.get(j));
 
-                if (i != j) {
-                    for (int n = 0; n < this.key_length; n++) {
-                        // check for the spaces
-                        byte xor_c1c2 = xorByte(line1[n], line2[n]);
-                        byte xor_c1k = xorByte(line1[n], (byte) 32);
-                        byte xor_c2k = xorByte(line2[n], (byte) 32);
+                for (int k = 0; k < lines.size(); k++) {
+                    byte[] line3 = returnByteArr(lines.get(k));
 
-                        byte a = xorByte(line1[n], line2[n]);
+                    if (i != j && i != k && j != k) {
+                        for (int n = 0; n < this.key_length; n++) {
+                            // if xor c1 and c2 has first 3 letters '010' that I know it's space, I don't know which one
+                            // if xor c1 and c2 is space and c2 xor c3 isn't space, then the space is c1 and do xor for c2 and c3
+                            // if xor c1 and c2 is space and c2 xor c3 is space, then c2 is space and do xor for c1 and c3
+                            // if c1 xor c3 = 0, then c1 and c3 is a space, c2 is a letter
+                            String xor_c1c2_bin = byteToBin(xorByte(line1[n], line2[n]));
 
+                            if (xor_c1c2_bin.substring(0, 3).equals("010")) {  // space
+                                byte xor_c1c2 = xorByte(line1[n], line2[n]);
+                                byte xor_c2c3 = xorByte(line2[n], line3[n]);
+                                byte xor_c1c3 = xorByte(line1[n], line3[n]);
+                                byte xor_c1c2c3 = xorByte(xor_c1c2, line3[n]);
+                                byte xor_c1_space = xorByte(line1[n], (byte) 32);
+                                byte xor_c2_space = xorByte(line2[n], (byte) 32);
+                                byte xor_c3_space = xorByte(line3[n], (byte) 32);
+
+                                if (xor_c2_space == xor_c3_space) {
+                                    if (xor_c2_space >= 97 && xor_c2_space <= 122) this.key[n] = (char) xor_c3_space;
+                                }
+                                else if (xor_c1_space == xor_c3_space) {
+                                    if (xor_c1_space >= 97 && xor_c1_space <= 122) this.key[n] = (char) xor_c1_space;
+                                }
+
+                                if (xor_c1c2c3 == 0) {
+                                    //this.key[n] = (char) line1[n];
+                                }
+
+                                if (n == 4) {
+                                    if (this.key[4] == 't') {
+                                        a++;
+                                    }
+                                }
+
+                                int b = 2;
+                            } else if (xor_c1c2_bin.substring(0, 3).equals("000")) {  // letter
+
+                            }
                         /*for (int k = 97; k < 122; k++) {
                             char xor_c1c2 = xorByte(line1[n], line2[n]);
                             char xor_c2k = xorByte(line2[n], (byte) k);
 
                             char a = xorByte(line1[n], line2[n]);
                         }*/
+                        }
                     }
                 }
             }
         }
 
+        // build the string from every character from key array
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char c : this.key) stringBuilder.append(c);
+
+        this.key_str = stringBuilder.toString();
         return found_key;
     }
 
@@ -150,19 +198,12 @@ class XorCipher {
             //System.out.printf("encrypted line: %s\n", String.valueOf(encrypted));
             //System.out.printf("decrypted line: %s\n", String.valueOf(decrypted));
 
-            // build the string from every character from key array
-            StringBuilder builder = new StringBuilder();
-            for (char c : key) {
-                if (Character.isLetter(c)) {
-                    builder.append(c);
-                }
-            }
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/decrypt.txt"));
             BufferedWriter writerKey = new BufferedWriter(new FileWriter(path + "/key-crypto.txt"));
 
             //writer.write(decrypted);
-            writerKey.write(builder.toString());
+            writerKey.write(this.key_str);
 
             writer.close();
             writerKey.close();
