@@ -25,8 +25,8 @@ class XorCipher {
         return (byte) (c1 ^ c2);
     }
 
-    private char xorByte(byte b1, byte b2) {
-        return (char) (b1 ^ b2);
+    private byte xorByte(byte b1, byte b2) {
+        return (byte) (b1 ^ b2);
     }
 
     private byte[] encrypt(char[] line) {
@@ -77,7 +77,12 @@ class XorCipher {
     }
 
     private byte[] returnByteArr(String line) {
-        byte[] arr = new byte[line.length()];
+        String[] line_arr = line.split(" ");
+        byte[] arr = new byte[line_arr.length];
+
+        for (int i = 0; i < line_arr.length; i++) {
+            arr[i] = Byte.parseByte(line_arr[i]);
+        }
 
         return arr;
     }
@@ -106,12 +111,19 @@ class XorCipher {
 
                 if (i != j) {
                     for (int n = 0; n < this.key_length; n++) {
-                        for (int k = 97; k < 122; k++) {
-                            char xor_c1c2 = xorByte((byte) k, line1[n]);
-                            char xor_c1c3 = xorByte((byte) k, line2[n]);
+                        // check for the spaces
+                        byte xor_c1c2 = xorByte(line1[n], line2[n]);
+                        byte xor_c1k = xorByte(line1[n], (byte) 32);
+                        byte xor_c2k = xorByte(line2[n], (byte) 32);
 
+                        byte a = xorByte(line1[n], line2[n]);
 
-                        }
+                        /*for (int k = 97; k < 122; k++) {
+                            char xor_c1c2 = xorByte(line1[n], line2[n]);
+                            char xor_c2k = xorByte(line2[n], (byte) k);
+
+                            char a = xorByte(line1[n], line2[n]);
+                        }*/
                     }
                 }
             }
