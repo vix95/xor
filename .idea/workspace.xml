@@ -3,17 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="50403dff-31bf-4f5f-b44f-5d8ac361ac5e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/xor/XorCipher.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/xor/XorCipher.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/XorCipher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/XorCipher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_files/crypto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/crypto.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_files/plain.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/plain.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="CodeStyleSettingsInfer">
-    <option name="done" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -25,9 +23,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectCodeStyleSettingsMigration">
-    <option name="version" value="1" />
-  </component>
   <component name="ProjectId" id="1TZnMcGkOuWbQkb047LVQWGW5kL" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -35,7 +30,6 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/kryptografia-master/lab3_kluczjednorazowy" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunDashboard">
@@ -100,29 +94,21 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
-          <line>189</line>
-          <option name="timeStamp" value="46" />
+          <line>226</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
-          <line>185</line>
-          <option name="timeStamp" value="88" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
-          <line>170</line>
-          <option name="timeStamp" value="89" />
+          <line>194</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="this.key" />
         <watch expression="line[pos]" />
+        <watch expression="pos" />
       </configuration>
     </watches-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/xor$Xor.ic" NAME="Xor Coverage Results" MODIFIED="1573811545759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

@@ -160,26 +160,63 @@ class XorCipher {
         }
 
         // check the key fo crypto text
-        for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
-            int space = 0;
-            for (int i = 0; i < lines.size(); i++) {  // let's go to down as column directions
+        for (int pos = 4; pos < this.key_length; pos++) {  // let's go by key
+            int space = 0, character = 0;
+            for (int i = 0, j = 1, k = 2; i < lines.size(); i++, j++, k++) {  // let's go to down as column directions
+                if (k == lines.size()) break;
                 byte[] line = returnByteArr(lines.get(i));
-                String xor_space = byteToBin(xorByte(line[pos], (byte) 32));
+                byte[] line2 = returnByteArr(lines.get(j));
+                byte[] line3 = returnByteArr(lines.get(k));
+                String xor_space = byteToBin(xorByte((byte) line[pos], (byte) line2[pos]));
+                byte xor_space_b = xorByte((byte) line[pos], (byte) line2[pos]);
+                String xor_c1k = byteToBin(xorByte((byte) line[pos], (byte) key[pos]));
+                String xor_c2k = byteToBin(xorByte((byte) line2[pos], (byte) key[pos]));
+                String xor_space1 = byteToBin(xorByte((byte) line[pos], (byte) 32));
+                String xor_space2 = byteToBin(xorByte((byte) line2[pos], (byte) 32));
                 //byte xor_k_c = xorByte((byte) this.key[pos], line[pos]);
                 //byte xor_k_space = xorByte((byte) this.key[pos], (byte) 32);
 
-                if (xor_space.substring(0, 3).equals("010")) {
-                    space++;
+                if (xor_space_b == 0) {
+                    String xor_test = byteToBin(xorByte((byte) line[pos], (byte) 32));
+                    byte xor_test_b1 = xorByte((byte) line[pos], (byte) 32);
+                    char xor_test_c1 = (char) xor_test_b1;
+                    byte xor_test_b2 = xorByte((byte) line2[pos], (byte) 32);
+                    char xor_test_c2 = (char) xor_test_b2;
+                    byte xor_test_b3 = xorByte((byte) line3[pos], (byte) 32);
+                    char xor_test_c3 = (char) xor_test_b3;
+
+                    if (((xor_test_b1 >= 97 && xor_test_b1 <= 122) || xor_test_b1 == 32) &&
+                            ((xor_test_b2 >= 97 && xor_test_b2 <= 122) || xor_test_b2 == 32) &&
+                            ((xor_test_b3 >= 97 && xor_test_b3 <= 122) || xor_test_b3 == 32)) {
+
+                        // if byte 32 is twice then I know that it's space
+                        // if xor 1, xor 2 and xor 3 is between 97 and 122 and
+                        // xor 1 == xor 2 == xor 3 than it isn't space
+                        if ((xor_test_b1 >= 97 && xor_test_b2 >= 97 && xor_test_b3 >= 97) &&
+                                !(xor_test_b1 == xor_test_b2 && xor_test_b2 == xor_test_b3)) {
+                            this.key[pos] = (char) 32;
+                            int y = 0;
+                        }
+
+                        int h = 0;
+                    }
+
+                    if (xor_test_b1 == xor_test_b2 && xor_test_b2 != xor_test_b3)
+                        if (xor_test_b3 >= 97 && xor_test_b3 <= 122) {
+                            //this.key[pos] = (char) xor_test_b1;
+                            int z = 0;
+                        }
+                    int p = 0;
                 }
 
-                if (line[pos] == 0) {
-                    //this.key[pos] = (char) 32;
-                    int b = 0;
-                    //break;
+                if (xor_space.substring(0, 3).equals("010")) {
+                    space++;
+                } else {
+                    character++;
                 }
             }
 
-            System.out.printf("pos: %d, spaces: %d\n", pos, space);
+            System.out.printf("for pos: %d - spaces: %d and characters: %d\n", pos, space, character);
         }
 
         // build the string from every character from key array
