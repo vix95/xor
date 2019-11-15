@@ -107,7 +107,7 @@ class XorCipher {
             byte[] line1 = returnByteArr(lines.get(i));
 
             for (int j = 0; j < lines.size(); j++) {
-                byte[] line2 = returnByteArr(lines.get(j++));
+                byte[] line2 = returnByteArr(lines.get(j));
 
                 if (i != j) {
                     for (int n = 0; n < this.key_length; n++) {
