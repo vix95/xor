@@ -89,10 +89,10 @@ class XorCipher {
     }
 
     private boolean cryptanalysis(final ArrayList<String> lines) {
-        boolean found_key = false;
         this.key = new char[returnByteArr(lines.get(1)).length];
         this.key_length = this.key.length;
 
+        // first looking for all possible characters
         for (int i = 0; i < lines.size(); i++) {
             byte[] line1 = returnByteArr(lines.get(i));
 
@@ -127,7 +127,7 @@ class XorCipher {
             }
         }
 
-        // check the key fo crypto text
+        // next looking for spaces
         for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
             for (int i = 0, j = 1, k = 2; i < lines.size(); i++, j++, k++) {  // let's go to down as column directions
                 if (k == lines.size()) break;
@@ -144,7 +144,7 @@ class XorCipher {
                     if (((xor_test_b1 >= 97 && xor_test_b1 <= 122) || xor_test_b1 == 32) &&
                             ((xor_test_b2 >= 97 && xor_test_b2 <= 122) || xor_test_b2 == 32) &&
                             ((xor_test_b3 >= 97 && xor_test_b3 <= 122) || xor_test_b3 == 32)) {
-                        
+
                         // if xor 1, xor 2 and xor 3 is between 97 and 122 and
                         // xor 1 == xor 2 == xor 3 than it isn't space
                         if ((xor_test_b1 >= 97 && xor_test_b2 >= 97 && xor_test_b3 >= 97) &&
@@ -157,11 +157,16 @@ class XorCipher {
         }
 
         // build the string from every character from key array
+        boolean found_key = true;
         StringBuilder stringBuilder = new StringBuilder();
-        for (char c : this.key) stringBuilder.append(c);
+        for (char c : this.key) {
+            stringBuilder.append(c);
+
+            if (c == '\u0000') found_key = false;
+        }
 
         this.key_str = stringBuilder.toString();
-        return true;
+        return found_key;
     }
 
     void breakCipher(final String path) throws IOException {
@@ -196,7 +201,7 @@ class XorCipher {
 
             System.out.printf("the key is: %s\n", String.valueOf(this.key));
         } else {
-            System.out.println("Error: finding the key is impossible");
+            System.out.println("Error: the key is incomplete");
         }
     }
 

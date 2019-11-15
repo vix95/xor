@@ -36,7 +36,6 @@ public class Xor {
                         xorCipher.encryptFile(path);
 
 
-
                         XorCipher xorCipher2 = new XorCipher();
                         xorCipher2.breakCipher(path);
                         break;
@@ -84,7 +83,7 @@ public class Xor {
         }
 
         // fill the gap to key_length
-        for (int i = 0; i < fake_chars; i++) preparedLine.append(' ');
+        if (fake_chars != key_length) for (int i = 0; i < fake_chars; i++) preparedLine.append(' ');
 
         return preparedLine.toString();
     }
