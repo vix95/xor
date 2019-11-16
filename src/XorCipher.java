@@ -1,7 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ class XorCipher {
         this.key_length = key.length();
     }
 
-    private byte xor(char c1, char c2) {
+    private byte xorChar(char c1, char c2) {
         return (byte) (c1 ^ c2);
     }
 
@@ -34,37 +33,41 @@ class XorCipher {
         byte[] encrypted_line = new byte[line.length];
         if (this.key_length == line.length) {
             for (int i = 0; i < line.length; i++) {
-                encrypted_line[i] = xor(this.key[i], line[i]);
+                encrypted_line[i] = xorChar(this.key[i], line[i]);
             }
         } else System.out.print("Length of the key isn't equal to line length. Cannot encrypt.");
 
         return encrypted_line;
     }
 
-    void encryptFile(final String path) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/crypto.txt"));
-        Scanner scanner = new Scanner(new File(path + "/plain.txt"));
+    void encryptFile(final String path) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/crypto.txt"));
+            Scanner scanner = new Scanner(new File(path + "/plain.txt"));
 
-        while (scanner.hasNextLine()) {
-            char[] line = scanner.nextLine().toCharArray();
-            byte[] encrypted_line = this.encrypt(line);
+            while (scanner.hasNextLine()) {
+                char[] line = scanner.nextLine().toCharArray();
+                byte[] encrypted_line = this.encrypt(line);
 
-            // prepare string to write in file
-            StringBuilder prepared_encyrpted_line = new StringBuilder();
+                // prepare string to write in file
+                StringBuilder prepared_encyrpted_line = new StringBuilder();
 
-            for (int i : encrypted_line) prepared_encyrpted_line.append(i).append(' ');
-            prepared_encyrpted_line.deleteCharAt(prepared_encyrpted_line.length() - 1);  // remove last space
+                for (int i : encrypted_line) prepared_encyrpted_line.append(i).append(' ');
+                prepared_encyrpted_line.deleteCharAt(prepared_encyrpted_line.length() - 1);  // remove last space
 
 
-            System.out.println("plain line: " + String.valueOf(line));
-            System.out.println("encrypted line: " + prepared_encyrpted_line + "\n");
+                System.out.println("plain line: " + String.valueOf(line));
+                System.out.println("encrypted line: " + prepared_encyrpted_line + "\n");
 
-            writer.write(prepared_encyrpted_line.toString());
-            writer.write('\n');
+                writer.write(prepared_encyrpted_line.toString());
+                writer.write('\n');
+            }
+
+            writer.close();
+            scanner.close();
+        } catch (Exception e) {
+            System.out.print("Error: plain file not found, can't do any action\n");
         }
-
-        writer.close();
-        scanner.close();
     }
 
     private char[] decrypt(String line) {
@@ -105,20 +108,15 @@ class XorCipher {
                 // if c1 xor c3 = 0, then c1 and c3 is a space, c2 is a letter
                 String m1m2_bin = byteToBin(xorByte(m1, m2));
                 String m2m3_bin = byteToBin(xorByte(m2, m3));
-                String m1m3_bin = byteToBin(xorByte(m1, m3));
 
                 if (m1m2_bin.substring(0, 3).equals("010") || m2m3_bin.substring(0, 3).equals("010")) {  // space
-                    byte m1m2 = xorByte(m1, m2);
                     byte m2m3 = xorByte(m2, m3);
-                    byte m1m3 = xorByte(m1, m3);
 
                     // if m1m2 and m2m3 has space then m2 is space
                     if (m1m2_bin.substring(0, 3).equals("010") && m2m3_bin.substring(0, 3).equals("010")) {
 
                         for (int c = 97; c <= 122; c++) {
-                            byte m1space = xorByte(m1, (byte) c);
                             byte m2space = xorByte(m2, (byte) c);
-                            byte m3space = xorByte(m3, (byte) c);
 
                             if (m2space == 32) {
                                 this.key[pos] = (char) c;
@@ -130,16 +128,12 @@ class XorCipher {
                             && m2m3 != 0) {
                         // check first for space
                         byte m1space = xorByte(m1, (byte) 32);
-                        byte m2space = xorByte(m2, (byte) 32);
-                        byte m3space = xorByte(m3, (byte) 32);
 
                         if (m1space == 32) {
                             this.key[pos] = (char) 32;
                         } else {
                             for (int c = 97; c <= 122; c++) {
                                 m1space = xorByte(m1, (byte) c);
-                                m2space = xorByte(m2, (byte) c);
-                                m3space = xorByte(m3, (byte) c);
 
                                 if (m1space == 32) {
                                     this.key[pos] = (char) c;
@@ -150,7 +144,6 @@ class XorCipher {
                     else if (m1 == m3) {
                         for (int c = 97; c <= 122; c++) {
                             byte m1space = xorByte(m1, (byte) c);
-                            byte m2space = xorByte(m2, (byte) c);
                             byte m3space = xorByte(m3, (byte) c);
 
                             if (m1space == 32 && m3space == 32) {
@@ -160,8 +153,6 @@ class XorCipher {
                     } // if m1m2 hasn't space and m2m3 has space then m3 is space
                     else if (!m1m2_bin.substring(0, 3).equals("010") && m2m3_bin.substring(0, 3).equals("010")) {
                         for (int c = 97; c <= 122; c++) {
-                            byte m1space = xorByte(m1, (byte) c);
-                            byte m2space = xorByte(m2, (byte) c);
                             byte m3space = xorByte(m3, (byte) c);
 
                             if (m3space == 32) {
@@ -186,39 +177,43 @@ class XorCipher {
         return found_key;
     }
 
-    void breakCipher(final String path) throws IOException {
-        Scanner scanner = new Scanner(new File(path + "/crypto.txt"));
-        ArrayList<String> lines = new ArrayList<>();
+    void breakCipher(final String path) {
+        try {
+            Scanner scanner = new Scanner(new File(path + "/crypto.txt"));
+            ArrayList<String> lines = new ArrayList<>();
 
-        // first read all encrypted lines
-        while (scanner.hasNextLine()) lines.add(scanner.nextLine());
-        scanner.close();
+            // first read all encrypted lines
+            while (scanner.hasNextLine()) lines.add(scanner.nextLine());
+            scanner.close();
 
-        if (lines.size() == 0) {
-            System.out.print("No text to decrypt\n");
-            return;
-        }
-
-        if (this.cryptanalysis(lines)) {
-            BufferedWriter writerKey = new BufferedWriter(new FileWriter(path + "/key-crypto.txt"));
-            writerKey.write(this.key_str);
-            writerKey.close();
-
-            BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/decrypt.txt"));
-            for (String encrypted : lines) {
-                char[] decrypted = this.decrypt(encrypted);
-                System.out.printf("encrypted line: %s\n", encrypted);
-                System.out.printf("decrypted line: %s\n\n", String.valueOf(decrypted));
-
-                writer.write(decrypted);
-                writer.write('\n');
+            if (lines.size() == 0) {
+                System.out.print("No text to decrypt\n");
+                return;
             }
 
-            writer.close();
+            if (this.cryptanalysis(lines)) {
+                BufferedWriter writerKey = new BufferedWriter(new FileWriter(path + "/key-crypto.txt"));
+                writerKey.write(this.key_str);
+                writerKey.close();
 
-            System.out.printf("the key is: %s\n", String.valueOf(this.key));
-        } else {
-            System.out.println("Error: the key is incomplete");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(path + "/decrypt.txt"));
+                for (String encrypted : lines) {
+                    char[] decrypted = this.decrypt(encrypted);
+                    System.out.printf("encrypted line: %s\n", encrypted);
+                    System.out.printf("decrypted line: %s\n\n", String.valueOf(decrypted));
+
+                    writer.write(decrypted);
+                    writer.write('\n');
+                }
+
+                writer.close();
+
+                System.out.printf("The key is: %s\n", String.valueOf(this.key));
+            } else {
+                System.out.println("Error: the key is incomplete");
+            }
+        } catch (Exception e) {
+            System.out.print("Error: crypto file not found, can't do any action\n");
         }
     }
 

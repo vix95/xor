@@ -30,14 +30,8 @@ public class Xor {
                         break;
 
                     case "-k":  // crypto analysis break key
-                        key = readKey();
-                        preparePlainFile(key);
-                        XorCipher xorCipher = new XorCipher(key);
-                        xorCipher.encryptFile(path);
-
-
-                        XorCipher xorCipher2 = new XorCipher();
-                        xorCipher2.breakCipher(path);
+                        XorCipher xorCipher = new XorCipher();
+                        xorCipher.breakCipher(path);
                         break;
 
                     default:
@@ -59,7 +53,7 @@ public class Xor {
             String prepared_line = prepareLine(String.valueOf(line), key);
 
             System.out.println("orig line: " + line);
-            System.out.println("prepared lines:\n" + prepared_line + "\n");
+            System.out.println("\nprepared lines:\n" + prepared_line + "\n");
 
             writer.write(prepared_line);
             writer.write('\n');
