@@ -93,63 +93,80 @@ class XorCipher {
         this.key_length = this.key.length;
 
         // first looking for all possible characters
-        for (int i = 0; i < lines.size(); i++) {
-            byte[] line1 = returnByteArr(lines.get(i));
+        for (int pos = 0; pos < this.key_length; pos++) {
+            for (int r1 = 0, r2 = 1, r3 = 2; r3 < lines.size(); r1++, r2++, r3++) {
+                byte m1 = returnByteArr(lines.get(r1))[pos];
+                byte m2 = returnByteArr(lines.get(r2))[pos];
+                byte m3 = returnByteArr(lines.get(r3))[pos];
 
-            for (int j = 0; j < lines.size(); j++) {
-                byte[] line2 = returnByteArr(lines.get(j));
+                // if xor c1 and c2 has first 3 letters '010' that I know it's space, I don't know which one
+                // if xor c1 and c2 is space and c2 xor c3 isn't space, then the space is c1 and do xor for c2 and c3
+                // if xor c1 and c2 is space and c2 xor c3 is space, then c2 is space and do xor for c1 and c3
+                // if c1 xor c3 = 0, then c1 and c3 is a space, c2 is a letter
+                String m1m2_bin = byteToBin(xorByte(m1, m2));
+                String m2m3_bin = byteToBin(xorByte(m2, m3));
+                String m1m3_bin = byteToBin(xorByte(m1, m3));
 
-                for (int k = 0; k < lines.size(); k++) {
-                    byte[] line3 = returnByteArr(lines.get(k));
+                if (m1m2_bin.substring(0, 3).equals("010") || m2m3_bin.substring(0, 3).equals("010")) {  // space
+                    byte m1m2 = xorByte(m1, m2);
+                    byte m2m3 = xorByte(m2, m3);
+                    byte m1m3 = xorByte(m1, m3);
 
-                    if (i != j && i != k && j != k) {
-                        for (int n = 0; n < this.key_length; n++) {
-                            // if xor c1 and c2 has first 3 letters '010' that I know it's space, I don't know which one
-                            // if xor c1 and c2 is space and c2 xor c3 isn't space, then the space is c1 and do xor for c2 and c3
-                            // if xor c1 and c2 is space and c2 xor c3 is space, then c2 is space and do xor for c1 and c3
-                            // if c1 xor c3 = 0, then c1 and c3 is a space, c2 is a letter
-                            String xor_c1c2_bin = byteToBin(xorByte(line1[n], line2[n]));
+                    // if m1m2 and m2m3 has space then m2 is space
+                    if (m1m2_bin.substring(0, 3).equals("010") && m2m3_bin.substring(0, 3).equals("010")) {
 
-                            if (xor_c1c2_bin.substring(0, 3).equals("010")) {  // space
-                                byte xor_c1_space = xorByte(line1[n], (byte) 32);
-                                byte xor_c2_space = xorByte(line2[n], (byte) 32);
-                                byte xor_c3_space = xorByte(line3[n], (byte) 32);
+                        for (int c = 97; c <= 122; c++) {
+                            byte m1space = xorByte(m1, (byte) c);
+                            byte m2space = xorByte(m2, (byte) c);
+                            byte m3space = xorByte(m3, (byte) c);
 
-                                if (xor_c2_space == xor_c3_space) {
-                                    if (xor_c2_space >= 97 && xor_c2_space <= 122) this.key[n] = (char) xor_c3_space;
-                                } else if (xor_c1_space == xor_c3_space) {
-                                    if (xor_c1_space >= 97 && xor_c1_space <= 122) this.key[n] = (char) xor_c1_space;
+                            if (m2space == 32) {
+                                this.key[pos] = (char) c;
+                            }
+                        }
+
+                    } // if m1m2 has space and m2m3 hasn't space then m1 is space
+                    else if (m1m2_bin.substring(0, 3).equals("010") && !m2m3_bin.substring(0, 3).equals("010")
+                            && m2m3 != 0) {
+                        // check first for space
+                        byte m1space = xorByte(m1, (byte) 32);
+                        byte m2space = xorByte(m2, (byte) 32);
+                        byte m3space = xorByte(m3, (byte) 32);
+
+                        if (m1space == 32) {
+                            this.key[pos] = (char) 32;
+                        } else {
+                            for (int c = 97; c <= 122; c++) {
+                                m1space = xorByte(m1, (byte) c);
+                                m2space = xorByte(m2, (byte) c);
+                                m3space = xorByte(m3, (byte) c);
+
+                                if (m1space == 32) {
+                                    this.key[pos] = (char) c;
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
+                    } // if m1 equals m3 then m1 and m3 is space
+                    else if (m1 == m3) {
+                        for (int c = 97; c <= 122; c++) {
+                            byte m1space = xorByte(m1, (byte) c);
+                            byte m2space = xorByte(m2, (byte) c);
+                            byte m3space = xorByte(m3, (byte) c);
 
-        // next looking for spaces
-        for (int pos = 0; pos < this.key_length; pos++) {  // let's go by key
-            for (int i = 0, j = 1, k = 2; i < lines.size(); i++, j++, k++) {  // let's go to down as column directions
-                if (k == lines.size()) break;
-                byte[] line = returnByteArr(lines.get(i));
-                byte[] line2 = returnByteArr(lines.get(j));
-                byte[] line3 = returnByteArr(lines.get(k));
-                byte xor_space_b = xorByte(line[pos], line2[pos]);
+                            if (m1space == 32 && m3space == 32) {
+                                this.key[pos] = (char) c;
+                            }
+                        }
+                    } // if m1m2 hasn't space and m2m3 has space then m3 is space
+                    else if (!m1m2_bin.substring(0, 3).equals("010") && m2m3_bin.substring(0, 3).equals("010")) {
+                        for (int c = 97; c <= 122; c++) {
+                            byte m1space = xorByte(m1, (byte) c);
+                            byte m2space = xorByte(m2, (byte) c);
+                            byte m3space = xorByte(m3, (byte) c);
 
-                if (xor_space_b == 0) {
-                    byte xor_test_b1 = xorByte(line[pos], (byte) 32);
-                    byte xor_test_b2 = xorByte(line2[pos], (byte) 32);
-                    byte xor_test_b3 = xorByte(line3[pos], (byte) 32);
-
-                    if (((xor_test_b1 >= 97 && xor_test_b1 <= 122) || xor_test_b1 == 32) &&
-                            ((xor_test_b2 >= 97 && xor_test_b2 <= 122) || xor_test_b2 == 32) &&
-                            ((xor_test_b3 >= 97 && xor_test_b3 <= 122) || xor_test_b3 == 32)) {
-
-                        // if xor 1, xor 2 and xor 3 is between 97 and 122 and
-                        // xor 1 == xor 2 == xor 3 than it isn't space
-                        if ((xor_test_b1 >= 97 && xor_test_b2 >= 97 && xor_test_b3 >= 97) &&
-                                !(xor_test_b1 == xor_test_b2 && xor_test_b2 == xor_test_b3)) {
-                            this.key[pos] = (char) 32;
+                            if (m3space == 32) {
+                                this.key[pos] = (char) c;
+                            }
                         }
                     }
                 }

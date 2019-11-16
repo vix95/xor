@@ -1,83 +1,27 @@
-scientists say they have developed a system that uses machine le
-arning to predict when and where lightning will strike researche
-rs report the system is able to predict lightning strikes up to 
-minutes before they happen within a kilometer area the research 
-was led by engineers from the swiss federal institute of technol
-ogy in lausanne switzerland the results were reported in the pub
-lication climate and atmospheric science lightning is a strong b
-urst of electricity in the atmosphere it is one of the oldest ob
-served weather events on earth it can strike between clouds or b
-etween a cloud and the ground since lightning carries an extreme
-ly powerful electrical charge it can be destructive and deadly i
-t is difficult to know exactly how many people die of lightningr
-elated causes european researchers have estimated that between a
-nd people are killed by lightning worldwide each year the strike
-s can also cause power outages destroy property damage electrica
-l equipment and start forest fires for this reason climate scien
-tists have long sought to develop methods to predict and control
- lightning in the united states and other places groundbased sen
-sing devices are used to identify strikes as they happen but no 
-system has been created to effectively predict or stop lightning
- the system tested in the experiments uses a combination of data
- from weather stations and machine learning methods the research
-ers developed a prediction model that was trained to recognize w
-eather conditions that were likely to cause lightning the model 
-was created with data collected over a year period from swiss we
-ather stations in cities and mountain areas the data related to 
-four main surface conditions air pressure air temperature relati
-ve humidity and wind speed our method uses data that can be obta
-ined from any weather station mostajabi said this will improve d
-ata collection in very remote areas not covered by radar and sat
-ellite or in places where communication systems have been cut he
- added the researchers plan to keep developing the technology in
- partnership with a european effort that aims to create a lightn
-ing protection system the effort is called the european laser li
-ghtning rod project scientists working on the parisbased project
- are experimenting with a laser technology that could someday co
-ntrol lightning activity the idea is that powerful groundbased l
-asers can be positioned in the sky to direct energy from lightni
-ng the experiments involve the use of lasers to transfer lightni
-ng charges from clouds to the ground the method uses a lightning
- rod placed at the base of the laser to take in electrical charg
-es from lightning in the clouds researchers say laboratory testi
-ng has shown that lasers can be used as a way to guide lightning
- to a direct safe path to the ground they hope that such technol
-ogy can one day be deployed as protection against lightning stri
-kes possible uses could be at power plants airports or places wh
-ere large crowds gather a japanese spacecraft has left a distant
- asteroid and started its return trip to earth after successfull
-y completing its mission the japan aerospace exploration agency 
-known as jaxa said the hayabusa spacecraft left its orbit around
- the asteroid ryugu wednesday the space rock is currently about 
-million kilometers from earth hayabusa s mission was to gather s
-oil samples and information that could provide clues to how the 
-solar system formed the countrys space agency said the spacecraf
-t is to bring those samples back so scientists can study them in
- a laboratory workers at the command center stood up and cheered
- when jaxa project manager yuichi tsuda confirmed the departure 
-the spacecraft captured pictures of ryugu as it began its return
- trip and sent them back to earth the asteroid ryugu or dragon p
-alace is named after a seabottom castle in a traditional japanes
-e story hayabusa will continue its farewell filming of the aster
-oid for a few more days jaxa said as the spacecraft travels away
- from the asteroid and toward earth it will adjust its position 
-it will retreat about kilometers from the asteroid and out of it
-s the gravitational pull after that the asteroid will be out of 
-sight of the spacecraft its sad to say goodbye to ryugu tsuda to
-ld reporters literally it has been at the center of our lives ov
-er the past years the spacecraft will then start its main thrust
-ers in early december to power it back to earth the return trip 
-will take about one year we expect hayabusa will bring us new sc
-ientific insights tsuda said not only the data but tangible samp
-les will be in our hands hayabusa arrived at the meterlong aster
-oid in june the spacecraft touched down on the extremely rocky a
-steroid two times and successfully collected information and soi
-l the first touchdown took place in february hayabusa collected 
-surface dust samples at the time in july it collected samples fr
-om beneath the surface of the asteroid after landing in a shallo
-w hole that it had blasted the operation was the first of its ki
-nd in the history of space exploration scientists said they dete
-cted small amounts of carbon and organic material in the asteroi
-d soil samples they will allow us to explore how carbon organic 
-matter and water are scattered around in the solar system why th
-ey exist on ryugu how they are related to the earth tsuda said  
+in the early hours of sunday november daylight saving time comes
+ to an end in most of the country people are supposed to turn th
+eir clocks back an hour so they will have one more hour to rest 
+but there are exceptions the time change is not observed in the 
+states of arizona or hawaii or united states territories such as
+ puerto rico and the virgin islands daylight saving time is the 
+tradition of moving the clocks forward one hour in march and tur
+ning them back again in november americans use the expression sp
+ring forward fall back to remember which way to set their clocks
+ american benjamin franklin first proposed the time change in he
+ liked the idea of moving clocks forward to take advantage of mo
+re sunlight during the summer months franklin wrote every mornin
+g as soon as the sun rises let all the bells in every church be 
+set ringing and if that is not sufficient let cannon be fired in
+ every street to wake the sluggards this led some people to beli
+eve that the proposal to move the time forward was just an attem
+pt to make late sleepers get up early in germany and britain agr
+eed to the time change during world war i to save energy when th
+e united states entered the war congress passed a law in to adop
+t daylight saving time the practice ended in because american fa
+rmers objected but returned in after the us entered world war ii
+ after the fighting stopped american states and towns were given
+ a choice whether to keep daylight saving time for a time this l
+ed to a freeforall system with people never really sure about th
+e timing of bus and train service congress passed a law to keep 
+the time uniform across the country however several states inclu
+ding hawaii and arizona kept control of the local time          

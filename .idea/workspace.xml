@@ -4,11 +4,10 @@
     <list default="true" id="50403dff-31bf-4f5f-b44f-5d8ac361ac5e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/xor/XorCipher.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/xor/XorCipher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Xor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Xor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/XorCipher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/XorCipher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_files/crypto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/crypto.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_files/decrypt.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/decrypt.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_files/key-crypto.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/key-crypto.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_files/orig.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/orig.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_files/plain.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test_files/plain.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,11 +93,19 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="line[pos]" />
-        <watch expression="pos" />
-      </configuration>
-    </watches-manager>
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
+          <line>185</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/XorCipher.java</url>
+          <line>109</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
